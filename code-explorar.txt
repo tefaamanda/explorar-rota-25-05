@@ -1,0 +1,36 @@
+
+@app.route('/ongs_aleatorias', methods=['GET'])
+def ongs_aleatorias():
+    cur = con.cursor()
+    cur.execute("""
+        SELECT id_usuario, nome, categoria, instagram, endereco, nome_resp, descricao_da_causa,
+               facebook, site_url, telefone, cnpj, cep, chave_pix, num_agencia, num_conta,
+               nome_banco, cidade
+        FROM USUARIO 
+        WHERE tipo = 2 AND aprovada = 1
+        ORDER BY RANDOM() ROWS 3
+    """)
+    ongs = cur.fetchall()
+    resultado = [
+        {
+            "id_usuario": ong[0],
+            "nome": ong[1],
+            "categoria": ong[2],
+            "instagram": ong[3],
+            "endereco": ong[4],
+            "nome_resp": ong[5],
+            "descricao_da_causa": ong[6],
+            "facebook": ong[7],
+            "site_url": ong[8],
+            "telefone": ong[9],
+            "cnpj": ong[10],
+            "cep": ong[11],
+            "chave_pix": ong[12],
+            "num_agencia": ong[13],
+            "num_conta": ong[14],
+            "nome_banco": ong[15],
+            "cidade": ong[16],
+        }
+        for ong in ongs
+    ]
+    return jsonify({"ongs": resultado})
